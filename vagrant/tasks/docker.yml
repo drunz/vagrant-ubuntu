@@ -1,0 +1,18 @@
+---
+
+- apt_key: keyserver=p80.pool.sks-keyservers.net id=58118E89F3A912897C070ADBF76221572C52609D
+- apt_repository: >
+    repo='deb https://apt.dockerproject.org/repo ubuntu-xenial main'
+    state=present
+
+- name: Install Docker Engine
+  apt: name=docker-engine state=latest
+
+- group: name=docker state=present
+- user: name=ubuntu groups=docker append=yes state=present
+
+- name: Ensure Docker is running
+  service: name=docker state=restarted enabled=yes
+
+- name: Install Docker compose
+  pip: name=docker-compose state=latest

@@ -1,0 +1,5 @@
+- name: Install uWSGI and plugins
+  apt: name={{ item }} state=latest
+  with_items:
+    - uwsgi
+    - uwsgi-plugin-python3

@@ -1,0 +1,41 @@
+---
+
+- name: Provision Vagrant
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+
+    - name: Upgrade all packages
+      apt: upgrade=dist
+
+    - name: Install base packages
+      apt: name={{ item }} state=latest
+      with_items:
+        - build-essential
+        - language-pack-en
+        - python-pip
+        - ca-certificates
+        - htop
+        - dstat
+        - ntp
+        - vim
+        - siege
+
+    - name: Force-update pip
+      command: pip install --upgrade pip
+
+    - include: tasks/docker.yml
+    - include: tasks/postgresql.yml
+    - include: tasks/python.yml
+    - include: tasks/uwsgi.yml
+
+    - name: Ensure NTP is running
+      service: name=ntp state=started enabled=yes
+
+    - name: Install pip tools
+      pip: name={{ item }} state=latest
+      with_items:
+        - virtualenv
+        - httpie

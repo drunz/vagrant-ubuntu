@@ -1,0 +1,43 @@
+---
+
+- apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc
+- apt_repository: >
+    repo='deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main'
+    state=present
+
+- name: Install PostgreSQL 9.5
+  apt: name={{ item }} state=latest
+  with_items:
+    - postgresql-9.5
+    - postgresql-contrib-9.5
+    - postgresql-client-9.5
+    - libpq-dev
+
+- name: Disable ident connections to PostgreSQL
+  lineinfile:
+    dest=/etc/postgresql/9.5/main/pg_hba.conf
+    regexp="^host.*md5$"
+    state=absent
+
+- name: Enable trusted connections to PostgreSQL
+  lineinfile:
+    dest=/etc/postgresql/9.5/main/pg_hba.conf
+    line="host    all    all    {{ item }}    trust"
+    state=present
+  with_items:
+      - 127.0.0.1/32
+      - ::1/128
+      - 0.0.0.0/0
+      - ::0/0
+
+- name: Change PostgreSQL listen addresses
+  lineinfile:
+    dest=/etc/postgresql/9.5/main/postgresql.conf
+    line="listen_addresses = '*'"
+    state=present
+
+- name: Reload PostgreSQL config
+  service: name=postgresql state=reloaded
+
+- name: Ensure PostgreSQL is running
+  service: name=postgresql state=started enabled=yes

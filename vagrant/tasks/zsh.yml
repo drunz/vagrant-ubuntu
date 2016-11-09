@@ -1,0 +1,13 @@
+- name: Install zsh shell
+  yum: name=zsh state=latest
+
+- name: Change default shell
+  shell: chsh -s /bin/zsh vagrant
+
+- name: Install oh-my-zsh
+  shell: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  become: true
+  become_user: vagrant
+  args:
+    executable: /bin/zsh
+    creates: ~/.oh-my-zsh
