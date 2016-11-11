@@ -15,8 +15,9 @@
       with_items:
         - build-essential
         - language-pack-en
-        - python-pip
+        - apt-transport-https
         - ca-certificates
+        - python-pip
         - htop
         - dstat
         - ntp
