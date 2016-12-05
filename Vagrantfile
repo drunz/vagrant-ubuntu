@@ -13,7 +13,10 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "..", "/projects", type: "rsync",
     rsync__auto: true,
     rsync__args: ["--verbose", "--rsync-path='sudo rsync'", "--archive", "-z", "--delete"],
-    rsync__exclude: [".git/", ".idea/", ".vagrant/", ".sass-cache/", "venv/"]
+    rsync__exclude: [
+      ".git/", ".idea/", ".vagrant/", ".sass-cache/", "venv/",
+      "dist/", "version.txt", "nohup.out"
+    ]
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 4096
