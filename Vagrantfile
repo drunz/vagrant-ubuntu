@@ -15,7 +15,7 @@ Vagrant.configure(2) do |config|
     rsync__args: ["--verbose", "--rsync-path='sudo rsync'", "--archive", "-z", "--delete"],
     rsync__exclude: [
       ".git/", ".idea/", ".vagrant/", ".sass-cache/", "venv/",
-      "dist/", "version.txt", "nohup.out"
+      "dist/", "version.txt", "nohup.out", "*.lock"
     ]
 
   config.vm.provider "virtualbox" do |vb|
